@@ -1,8 +1,11 @@
 import * as cdk from "@aws-cdk/core";
 import * as lambda from "@aws-cdk/aws-lambda";
 import * as dynamodb from "@aws-cdk/aws-dynamodb";
+import * as apiGateway from "@aws-cdk/aws-apigatewayv2";
+import * as eb from "@aws-cdk/aws-elasticbeanstalk";
 
 import * as path from "path";
+import { TatoebaBeanstalkApp } from "./tatoeba-beanstalk-app";
 
 export class Cdk2Stack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -18,5 +21,9 @@ export class Cdk2Stack extends cdk.Stack {
     const table = new dynamodb.Table(this, "Table", {
       partitionKey: { name: "id", type: dynamodb.AttributeType.NUMBER },
     });
+
+    const app = new TatoebaBeanstalkApp(this, "tatoeba-app");
+
+    table.grantReadWriteData(fn);
   }
 }
